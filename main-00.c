@@ -30,8 +30,8 @@ bool quit = false;
 
 int px[P_MAX],py[P_MAX];
 int pxi[P_MAX],pyi[P_MAX];
-int r,g,b;
-int f=0;
+
+
 
 int main(void) {
 
@@ -49,9 +49,6 @@ int main(void) {
 	SDL_SetTextureBlendMode(texture,SDL_BLENDMODE_BLEND);
 
 
-	r=rand()%256;
-	g=rand()%256;
-	b=rand()%256;
 
 	for(size_t i=0;i<P_MAX;i++) {
 		px[i]=rand()%SCREEN_WIDTH;
@@ -74,13 +71,45 @@ int main(void) {
 
 		SDL_SetRenderTarget(renderer,texture);
 
-		SDL_SetRenderDrawColor( renderer, 0x00, 0x00, 0x00, 0x08 );
+		SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0x08 );
 
 		SDL_RenderFillRect(renderer,&(SDL_Rect){0,0,SCREEN_WIDTH,SCREEN_HEIGHT});
 
-		SDL_SetRenderDrawColor( renderer, r, g, b, 0xFF );
+		SDL_SetRenderDrawColor( renderer, 0x00, 0x00, 0x00, 0xFF );
+
+
+
+		int x=4,y=4,size=32,gap=4;
+
+		SDL_RenderDrawPoint(renderer,x+size/2,y+size/2);
+
+		x+=size+gap;
+
+		SDL_RenderDrawLine(renderer,x,y,x+size,y+size);
+
+		x+=size+gap;
+
+		{
+			SDL_Rect rect= {x,y,size,size};
+			SDL_RenderDrawRect(renderer,&rect);
+		}
+
+		x+=size+gap;
+
+		{
+			SDL_Rect rect= {x,y,size,size};
+			SDL_RenderFillRect(renderer,&rect);
+		}
+
+		x+=size+gap;
+		SDL_RenderDrawCircle(renderer,x+size/2,y+size/2,size/2);
+
+		x+=size+gap;
+		SDL_RenderFillCircle(renderer,x+size/2,y+size/2,size/2);
 
 		SDL_RenderDrawPoly(renderer,px,py,P_MAX); 
+
+		
 		for(size_t i=0;i<P_MAX;i++) {
 			px[i]+=pxi[i];
 			py[i]+=pyi[i];
@@ -100,14 +129,6 @@ int main(void) {
 		SDL_RenderCopy(renderer,texture,NULL,NULL);		
 
 		SDL_RenderPresent( renderer );
-
-		f++;
-
-		if(f%100==0) {
-			r=rand()%256;
-			g=rand()%256;
-			b=rand()%256;
-		}
 
 	}
 
